@@ -19,10 +19,6 @@ export default async function FightersPage() {
         </div>
       )}
 
-      {fighters && fighters.length === 0 && (
-        <p className="text-gray-400">No fighters available in Supabase.</p>
-      )}
-
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {fighters?.map((fighter) => (
           <Link 
