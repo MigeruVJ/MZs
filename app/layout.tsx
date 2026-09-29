@@ -1,4 +1,4 @@
-importimport "./globals.css";
+import "./globals.css";
 import Link from "next/link";
 import { Barlow_Condensed, Barlow } from "next/font/google";
 
