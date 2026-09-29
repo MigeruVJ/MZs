@@ -17,7 +17,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               Combat<span className="text-corner-red">Score</span>
             </Link>
             <Link href="/" className="text-sm">Events</Link>
-            <Link href="/fighters" className="hover:text-primary transition-colors font-medium">Fighters</Link>
+            <Link href="/fighters" className="text-sm">Fighters</Link>
             <Link href="/search" className="text-sm ml-auto">Search</Link>
           </nav>
         </header>
