@@ -11,14 +11,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${display.variable} ${body.variable}`}>
       <body>
-       <header className="bg-ink text-chalk sticky top-0 z-10">
+       <header className="bg-ink text-chalk sticky top-0 z-10 border-b border-zinc-800">
          <nav className="mx-auto max-w-3xl flex items-center gap-5 px-4 h-14">
            <Link href="/" className="font-display text-2xl font-extrabold tracking-tight">
              Combat<span className="text-corner-red">Score</span>
            </Link>
-           <Link href="/events" className="text-sm font-semibold">Events</Link>
-           <Link href="/fighters" className="text-sm font-semibold">Fighters</Link>
-           <Link href="/search" className="text-sm font-semibold ml-auto">Search</Link>
+           <Link href="/events" className="text-sm font-semibold hover:text-corner-red transition-colors">Events</Link>
+           <Link href="/fighters" className="text-sm font-semibold hover:text-corner-red transition-colors">Fighters</Link>
+           <Link href="/search" className="text-sm font-semibold ml-auto hover:text-corner-red transition-colors">Search</Link>
            <Link href="/login" className="text-sm font-semibold text-corner-red hover:underline">Login</Link>
          </nav>
        </header>

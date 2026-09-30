@@ -17,7 +17,6 @@ export default function FollowButton({ fighterId }: { fighterId: string }) {
       }
       setUser(session.user);
 
-      // Verificar si ya sigue a este luchador en la tabla follows
       const { data } = await supabase
         .from("follows")
         .select("*")
@@ -63,7 +62,7 @@ export default function FollowButton({ fighterId }: { fighterId: string }) {
       className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all border shadow-sm ${
         following 
           ? "bg-zinc-200 text-zinc-900 border-zinc-300 hover:bg-zinc-300" 
-          : "bg-corner-red text-white border-red-700 hover:opacity-95"
+          : "bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800"
       }`}
     >
       {following ? "✓ Following" : "+ Follow Fighter"}
