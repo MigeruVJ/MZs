@@ -16,11 +16,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
            <Link href="/" className="font-display text-2xl font-extrabold tracking-tight">
              Combat<span className="text-corner-red">Score</span>
            </Link>
-           <Link href="/events" className="text-sm">Events</Link>
-          <Link href="/fighters" className="text-sm font-semibold">Fighters</Link>
-          <Link href="/search" className="text-sm ml-auto">Search</Link>
-        </nav>
-      </header>
+           <Link href="/events" className="text-sm font-semibold">Events</Link>
+           <Link href="/fighters" className="text-sm font-semibold">Fighters</Link>
+           <Link href="/search" className="text-sm font-semibold ml-auto">Search</Link>
+           <Link href="/login" className="text-sm font-semibold text-corner-red hover:underline">Login</Link>
+         </nav>
+       </header>
         <main className="mx-auto max-w-3xl px-4 py-6">{children}</main>
       </body>
     </html>
