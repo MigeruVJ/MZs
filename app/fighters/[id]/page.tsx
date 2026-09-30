@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { supabase, fmtDate } from "@/lib/supabase";
-
+import FollowButton from "@/components/FollowButton";
 export const revalidate = 15;
 
 export default async function FighterPage({ params }: { params: Promise<{ id: string }> }) {
@@ -59,16 +59,20 @@ export default async function FighterPage({ params }: { params: Promise<{ id: st
         </div>
 
         {/* Fighter Meta info */}
-        <div className="space-y-3 text-center md:text-left flex-1">
-          <div className="flex flex-wrap items-center justify-center md:justify-start gap-2">
-            <span className="text-xs uppercase px-3 py-1 rounded-full bg-red-100 border border-red-200 font-bold text-red-700">
-              {fighter.weight_class || "Pro Athlete"}
-            </span>
-            {fighter.country && (
-              <span className="text-xs font-semibold px-2.5 py-1 rounded bg-zinc-100 text-zinc-700">
-                📍 {fighter.country}
+        <div className="space-y-3 text-center md:text-left flex-1 w-full">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <span className="text-xs uppercase px-3 py-1 rounded-full bg-red-100 border border-red-200 font-bold text-red-700">
+                {fighter.weight_class || "Pro Athlete"}
               </span>
-            )}
+              {fighter.country && (
+                <span className="text-xs font-semibold px-2.5 py-1 rounded bg-zinc-100 text-zinc-700">
+                  📍 {fighter.country}
+                </span>
+              )}
+            </div>
+            {/* Botón de seguir integrado aquí */}
+            <FollowButton fighterId={fighter.id} />
           </div>
 
           <div>
