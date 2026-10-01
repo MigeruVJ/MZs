@@ -7,7 +7,8 @@ export const revalidate = 0;
 export default async function FightersPage() {
   const { data: fighters, error } = await supabase
     .from("fighters")
-    .select("id, name, nickname, weight_class, sport, wins, losses, draws, country");
+    .select("id, name, nickname, weight_class, sport, wins, losses, draws, country")
+    .order("name", { ascending: true });
 
   return (
     <div className="space-y-6 p-4 text-chalk">
