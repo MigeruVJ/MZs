@@ -18,6 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
            </Link>
            <Link href="/events" className="text-sm font-semibold hover:text-corner-red transition-colors">Events</Link>
            <Link href="/fighters" className="text-sm font-semibold hover:text-corner-red transition-colors">Fighters</Link>
+           <Link href="/rankings" className="text-sm font-semibold hover:text-corner-red transition-colors">Rankings</Link>
            <Link href="/search" className="text-sm font-semibold ml-auto hover:text-corner-red transition-colors">Search</Link>
            <Link href="/login" className="text-sm font-semibold text-corner-red hover:underline">Login</Link>
          </nav>
