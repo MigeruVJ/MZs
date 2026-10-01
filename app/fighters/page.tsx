@@ -7,8 +7,12 @@ export const revalidate = 0;
 export default async function FightersPage() {
   const { data: fighters, error } = await supabase
     .from("fighters")
-    .select("id, name, nickname, weight_class, sport, wins, losses, draws, country")
-    .order("name", { ascending: true });
+    .select("id, name, nickname, weight_class, sport, wins, losses, draws, country");
+
+  // Ordenamiento alfabético seguro en JavaScript (insensible a mayúsculas y acentos)
+  const sortedFighters = fighters 
+    ? [...fighters].sort((a, b) => (a.name || "").localeCompare(b.name || "", "en", { sensitivity: "base" }))
+    : [];
 
   return (
     <div className="space-y-6 p-4 text-chalk">
@@ -22,7 +26,7 @@ export default async function FightersPage() {
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {fighters?.map((fighter) => (
+        {sortedFighters.map((fighter) => (
           <Link 
             key={fighter.id} 
             href={`/fighters/${fighter.id}`}
