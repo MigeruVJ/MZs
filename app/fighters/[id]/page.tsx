@@ -16,6 +16,12 @@ export default async function FighterPage({ params }: { params: Promise<{ id: st
 
   if (!fighter) notFound();
 
+  // 1.1 Fetch fighter aliases for cross-promotional identity unification
+  const { data: aliases } = await supabase
+    .from("fighter_aliases")
+    .select("alias_name, source")
+    .eq("fighter_id", id);
+
   // 2. Fetch fights where this fighter is either fighter_a or fighter_b
   const { data: fights } = await supabase
     .from("fights")
@@ -102,6 +108,26 @@ export default async function FighterPage({ params }: { params: Promise<{ id: st
               </div>
             )}
           </div>
+
+          {/* Sección de Alias / Variaciones de Nombres (Cross-promotional Unification) */}
+          {aliases && aliases.length > 0 && (
+            <div className="pt-3 border-t border-zinc-100 space-y-1.5 text-left">
+              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-zinc-400 block">
+                Known Aliases / Promotion Variations
+              </span>
+              <div className="flex flex-wrap gap-1.5">
+                {aliases.map((aliasItem: any, idx: number) => (
+                  <span 
+                    key={idx}
+                    className="inline-flex items-center gap-1 text-xs font-mono bg-zinc-100 border border-zinc-200 text-zinc-700 px-2.5 py-0.5 rounded-md"
+                  >
+                    {aliasItem.alias_name}
+                    {aliasItem.source && <span className="text-[9px] text-zinc-400">({aliasItem.source})</span>}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
