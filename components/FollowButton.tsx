@@ -17,12 +17,13 @@ export default function FollowButton({ fighterId }: { fighterId: string }) {
       }
       setUser(session.user);
 
+      // Usamos maybeSingle() para evitar errores en consola si el usuario aún no sigue al luchador
       const { data } = await supabase
         .from("follows")
         .select("*")
         .eq("user_id", session.user.id)
         .eq("fighter_id", fighterId)
-        .single();
+        .maybeSingle();
 
       if (data) setFollowing(true);
       setLoading(false);
