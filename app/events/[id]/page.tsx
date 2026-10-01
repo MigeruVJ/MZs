@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { supabase, fmtDate } from "@/lib/supabase";
+import FightPickCard from "@/components/FightPickCard";
 
 export const revalidate = 15;
 
@@ -34,6 +35,10 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
   // Await params for Next.js 15+ compatibility
   const { id } = await params;
 
+  // 1. Obtener la sesión del usuario actual para el Pick 'Em
+  const { data: { session } } = await supabase.auth.getSession();
+  const userId = session?.user?.id;
+
   const { data: event } = await supabase
     .from("events")
     .select("*, organizations(name)")
@@ -47,6 +52,22 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
     .select("*, a:fighters!fights_fighter_a_fkey(id,name,wins,losses,draws), b:fighters!fights_fighter_b_fkey(id,name,wins,losses,draws)")
     .eq("event_id", id)
     .order("bout_order", { ascending: false });
+
+  // 2. Obtener los pronósticos previos que este usuario haya hecho para este evento
+  let userPicksMap: Record<string, string> = {};
+  if (userId && fights) {
+    const { data: picks } = await supabase
+      .from("user_picks")
+      .select("fight_id, predicted_fighter_id")
+      .eq("user_id", userId)
+      .eq("event_id", event.id);
+
+    if (picks) {
+      picks.forEach((p: any) => {
+        userPicksMap[p.fight_id] = p.predicted_fighter_id;
+      });
+    }
+  }
 
   return (
     <div className="max-w-4xl mx-auto p-4 md:p-6 space-y-8 text-zinc-900">
@@ -84,11 +105,14 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
         </div>
       </div>
 
-      {/* Fight Card Section */}
+      {/* Fight Card & Pick 'Em Section */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold text-zinc-900 tracking-wide">Fight Card</h2>
-          <span className="text-xs text-zinc-500">{(fights ?? []).length} bouts scheduled</span>
+          <div>
+            <h2 className="text-xl font-bold text-zinc-900 tracking-wide">Fight Card & Picks</h2>
+            <p className="text-xs text-zinc-500">Make your predictions for each matchup below</p>
+          </div>
+          <span className="text-xs font-mono text-zinc-500">{(fights ?? []).length} bouts scheduled</span>
         </div>
 
         {(!fights || fights.length === 0) && (
@@ -97,7 +121,7 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
           </div>
         )}
 
-        <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-1 gap-6">
           {(fights ?? []).map((f: any) => (
             <div 
               key={f.id} 
@@ -122,7 +146,7 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
                 </span>
               </div>
 
-              {/* Corners Matchup */}
+              {/* Corners Matchup / Resultados o Votación */}
               <div className="grid grid-cols-1 md:grid-cols-[1fr,auto,1fr] items-center gap-4">
                 <Corner fighter={f.a} color="red" won={f.winner_id === f.a?.id} />
                 
@@ -133,6 +157,23 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
                 </div>
 
                 <Corner fighter={f.b} color="blue" won={f.winner_id === f.b?.id} right />
+              </div>
+
+              {/* Componente de Pronósticos (Pick 'Em) */}
+              <div className="pt-2 border-t border-zinc-100">
+                <FightPickCard 
+                  fight={{
+                    id: f.id,
+                    weight_class: f.weight_class,
+                    fighter_1_id: f.a?.id,
+                    fighter_2_id: f.b?.id,
+                    fighter_1: f.a,
+                    fighter_2: f.b
+                  }}
+                  eventId={event.id}
+                  userId={userId}
+                  initialPick={userPicksMap[f.id]}
+                />
               </div>
 
               {/* Finished Result Banner */}
