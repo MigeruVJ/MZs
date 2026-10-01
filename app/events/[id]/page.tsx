@@ -1,8 +1,34 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { supabase, fmtDate } from "@/lib/supabase";
 
 export const revalidate = 15;
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
+  const { data: event } = await supabase
+    .from("events")
+    .select("*, organizations(name)")
+    .eq("id", id)
+    .single();
+
+  if (!event) {
+    return { title: "Event Not Found | CombatScore" };
+  }
+
+  const title = `${event.name} | CombatScore Live Results`;
+  const description = `Live fight card, results, and schedules for ${event.name} in ${event.city}, ${event.country}.`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+    },
+  };
+}
 
 export default async function EventPage({ params }: { params: Promise<{ id: string }> }) {
   // Await params for Next.js 15+ compatibility
